@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4A90D9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Korean App</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="login-container">
+                <h1>한국어</h1>
+                <p>Korean Learning App</p>
+                <form id="login-form">
+                    <input type="text" id="login-username" placeholder="Username" autocomplete="username" style="display:none">
+                    <input type="password" id="login-password" placeholder="Password" autocomplete="current-password">
+                    <button type="submit">Login</button>
+                    <p id="login-error" class="error hidden"></p>
+                    <a href="#" id="teacher-login-toggle" style="display:block;text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--text-secondary)">선생님 로그인</a>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main App -->
+        <div id="main-app" class="hidden">
+            <header id="app-header">
+                <h2 id="page-title">Practice</h2>
+            </header>
+
+            <main id="page-content">
+                <div id="page-practice" class="page active"></div>
+                <div id="page-review" class="page"></div>
+                <div id="page-lessons" class="page"></div>
+                <div id="page-items" class="page"></div>
+                <div id="page-stats" class="page"></div>
+                <div id="page-settings" class="page"></div>
+                <div id="page-teacher" class="page"></div>
+            </main>
+
+            <nav id="bottom-nav">
+                <button class="nav-btn active" data-page="practice">
+                    <span class="nav-icon">🎤</span>
+                    <span class="nav-label">Practice</span>
+                </button>
+                <button class="nav-btn" data-page="review">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-label">Review</span>
+                </button>
+                <button class="nav-btn" data-page="lessons">
+                    <span class="nav-icon">📖</span>
+                    <span class="nav-label">Lessons</span>
+                </button>
+                <button class="nav-btn" data-page="items">
+                    <span class="nav-icon">📚</span>
+                    <span class="nav-label">Items</span>
+                </button>
+                <button class="nav-btn" data-page="stats">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Stats</span>
+                </button>
+                <button class="nav-btn" data-page="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Settings</span>
+                </button>
+                <button class="nav-btn hidden" data-page="teacher" id="nav-teacher">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-label">관리</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/audio.js"></script>
+    <script src="/static/js/components/feedback.js"></script>
+    <script src="/static/js/components/item-card.js"></script>
+    <script src="/static/js/components/nav.js"></script>
+    <script src="/static/js/pages/practice.js"></script>
+    <script src="/static/js/pages/review.js"></script>
+    <script src="/static/js/pages/lessons.js"></script>
+    <script src="/static/js/pages/items.js"></script>
+    <script src="/static/js/pages/stats.js"></script>
+    <script src="/static/js/pages/settings.js"></script>
+    <script src="/static/js/pages/teacher.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

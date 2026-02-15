@@ -1,0 +1,15 @@
+[Unit]
+Description=Korean Learning App
+After=network.target
+
+[Service]
+Type=simple
+User=robbie
+WorkingDirectory=/home/robbie/korean_app
+ExecStart=/home/robbie/korean_app/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8100
+Restart=always
+RestartSec=5
+Environment=PATH=/home/robbie/korean_app/venv/bin:/usr/bin
+
+[Install]
+WantedBy=multi-user.target
