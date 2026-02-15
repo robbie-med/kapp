@@ -12,7 +12,7 @@ const CalendarPage = {
         this.currentWeekStart = new Date(today);
         this.currentWeekStart.setDate(today.getDate() - today.getDay()); // Start of week (Sunday)
 
-        el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+        el.innerHTML = `<div class="loading"><div class="spinner"></div>${t('loading')}</div>`;
 
         try {
             const studentsData = await API.getStudents();
@@ -44,14 +44,14 @@ const CalendarPage = {
 
         el.innerHTML = `
             <div style="margin-bottom:1rem">
-                <h3>📅 Curriculum Calendar</h3>
-                <p style="color:var(--text-secondary);font-size:0.9rem">Assign lessons, sentences, and vocab to students</p>
+                <h3>📅 ${t('calendar_title')}</h3>
+                <p style="color:var(--text-secondary);font-size:0.9rem">${t('calendar_desc')}</p>
             </div>
 
             <div class="card" style="margin-bottom:1rem">
                 <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
                     <div style="flex:1;min-width:200px">
-                        <label style="display:block;font-weight:600;margin-bottom:0.5rem">Student:</label>
+                        <label style="display:block;font-weight:600;margin-bottom:0.5rem">${t('student')}:</label>
                         <select id="student-select" class="input" style="width:100%">
                             ${this.students.map(s => `
                                 <option value="${s.id}" ${s.id === this.currentStudent ? 'selected' : ''}>
@@ -61,9 +61,9 @@ const CalendarPage = {
                         </select>
                     </div>
                     <div style="display:flex;gap:0.5rem;align-items:center">
-                        <button class="btn btn-secondary" id="prev-week-btn">← Previous Week</button>
-                        <button class="btn btn-secondary" id="today-btn">Today</button>
-                        <button class="btn btn-secondary" id="next-week-btn">Next Week →</button>
+                        <button class="btn btn-secondary" id="prev-week-btn">← ${t('prev_week')}</button>
+                        <button class="btn btn-secondary" id="today-btn">${t('today')}</button>
+                        <button class="btn btn-secondary" id="next-week-btn">${t('next_week')} →</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@ const CalendarPage = {
             </div>
 
             <div class="card">
-                <h4 style="margin-bottom:0.75rem">📋 Assignments This Week</h4>
+                <h4 style="margin-bottom:0.75rem">📋 ${t('assignments_this_week')}</h4>
                 <div id="assignments-list"></div>
             </div>
         `;
@@ -133,9 +133,9 @@ const CalendarPage = {
                     </div>
                     ${dayAssignments.length > 0 ? `
                         <div style="background:var(--primary);color:white;font-size:0.7rem;padding:0.25rem;border-radius:4px;text-align:center">
-                            ${dayAssignments.length} assignment${dayAssignments.length > 1 ? 's' : ''}
+                            ${dayAssignments.length} ${t(dayAssignments.length > 1 ? 'assignments' : 'assignment')}
                         </div>
-                    ` : '<div style="font-size:0.7rem;color:var(--text-secondary)">No assignments</div>'}
+                    ` : `<div style="font-size:0.7rem;color:var(--text-secondary)">${t('no_assignments')}</div>`}
                 </div>
             `;
         }
@@ -146,12 +146,12 @@ const CalendarPage = {
         const container = document.getElementById('assignments-list');
 
         if (this.assignments.length === 0) {
-            container.innerHTML = '<p style="color:var(--text-secondary);font-size:0.85rem">No assignments this week</p>';
+            container.innerHTML = `<p style="color:var(--text-secondary);font-size:0.85rem">${t('no_assignments_week')}</p>`;
             return;
         }
 
         const typeIcons = { lesson: '📚', sentence: '💬', vocab: '📗' };
-        const typeLabels = { lesson: 'Lesson', sentence: 'Sentence', vocab: 'Vocabulary' };
+        const typeLabels = { lesson: t('lesson'), sentence: t('sentence'), vocab: t('vocabulary') };
 
         container.innerHTML = this.assignments.map(a => {
             const dueDate = new Date(a.due_date);
@@ -160,7 +160,7 @@ const CalendarPage = {
 
             let title = '';
             if (a.assignment_type === 'lesson') {
-                title = `Lesson ${a.lesson_number}: ${a.lesson_title}`;
+                title = `${t('lesson')} ${a.lesson_number}: ${a.lesson_title}`;
             } else if (a.assignment_type === 'sentence') {
                 title = a.sentence_korean;
             } else if (a.assignment_type === 'vocab') {
@@ -174,16 +174,16 @@ const CalendarPage = {
                         <div style="flex:1">
                             <div style="font-weight:600;margin-bottom:0.25rem">
                                 ${typeIcons[a.assignment_type]} ${this._esc(title)}
-                                ${isCompleted ? '<span style="color:var(--success);font-size:0.9rem">✓ Complete</span>' : ''}
+                                ${isCompleted ? `<span style="color:var(--success);font-size:0.9rem">✓ ${t('completed')}</span>` : ''}
                             </div>
                             <div style="font-size:0.75rem;color:var(--text-secondary)">
-                                ${typeLabels[a.assignment_type]} • Due: ${dueDate.toLocaleDateString()}
-                                ${isOverdue ? '<span style="color:var(--error);font-weight:600"> (Overdue)</span>' : ''}
+                                ${typeLabels[a.assignment_type]} • ${t('due')}: ${dueDate.toLocaleDateString()}
+                                ${isOverdue ? `<span style="color:var(--error);font-weight:600"> (${t('overdue')})</span>` : ''}
                             </div>
                             ${a.notes ? `<div style="font-size:0.8rem;margin-top:0.5rem;color:var(--text-secondary)">${this._esc(a.notes)}</div>` : ''}
                         </div>
                         <button class="btn btn-secondary" style="padding:4px 8px;font-size:0.8rem"
-                                onclick="CalendarPage.deleteAssignment(${a.id})">Delete</button>
+                                onclick="CalendarPage.deleteAssignment(${a.id})">${t('delete')}</button>
                     </div>
                 </div>
             `;
@@ -200,28 +200,28 @@ const CalendarPage = {
 
         modal.innerHTML = `
             <div class="card" style="width:90%;max-width:500px;max-height:80vh;overflow-y:auto">
-                <h4 style="margin-bottom:1rem">Add Assignment for ${this._esc(studentName)}</h4>
-                <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:1rem">Due: ${new Date(dueDate).toLocaleDateString()}</p>
+                <h4 style="margin-bottom:1rem">${t('add_assignment_for')} ${this._esc(studentName)}</h4>
+                <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:1rem">${t('due')}: ${new Date(dueDate).toLocaleDateString()}</p>
 
                 <div style="margin-bottom:1rem">
-                    <label style="display:block;font-weight:600;margin-bottom:0.5rem">Assignment Type:</label>
+                    <label style="display:block;font-weight:600;margin-bottom:0.5rem">${t('assignment_type')}:</label>
                     <select id="assignment-type" class="input" style="width:100%">
-                        <option value="lesson">📚 Lesson</option>
-                        <option value="sentence">💬 Sentence</option>
-                        <option value="vocab">📗 Vocabulary</option>
+                        <option value="lesson">📚 ${t('lesson')}</option>
+                        <option value="sentence">💬 ${t('sentence')}</option>
+                        <option value="vocab">📗 ${t('vocabulary')}</option>
                     </select>
                 </div>
 
                 <div id="assignment-selector"></div>
 
                 <div style="margin-bottom:1rem">
-                    <label style="display:block;font-weight:600;margin-bottom:0.5rem">Notes (optional):</label>
+                    <label style="display:block;font-weight:600;margin-bottom:0.5rem">${t('notes')} (${t('optional')}):</label>
                     <textarea id="assignment-notes" class="input" rows="3" style="width:100%"></textarea>
                 </div>
 
                 <div style="display:flex;gap:0.5rem">
-                    <button class="btn btn-secondary btn-block" onclick="CalendarPage.closeModal()">Cancel</button>
-                    <button class="btn btn-primary btn-block" id="save-assignment-btn">Save Assignment</button>
+                    <button class="btn btn-secondary btn-block" onclick="CalendarPage.closeModal()">${t('cancel')}</button>
+                    <button class="btn btn-primary btn-block" id="save-assignment-btn">${t('save_assignment')}</button>
                 </div>
             </div>
         `;
@@ -272,10 +272,10 @@ const CalendarPage = {
 
     async renderAssignmentSelector(type) {
         const container = document.getElementById('assignment-selector');
-        container.innerHTML = '<div class="loading">Loading options...</div>';
+        container.innerHTML = `<div class="loading">${t('loading')}</div>`;
 
         try {
-            let html = '<label style="display:block;font-weight:600;margin-bottom:0.5rem">Select Item:</label>';
+            let html = `<label style="display:block;font-weight:600;margin-bottom:0.5rem">${t('select_item')}:</label>`;
             html += '<select id="assignment-selector-value" class="input" style="width:100%">';
 
             if (type === 'lesson') {
@@ -308,13 +308,13 @@ const CalendarPage = {
     },
 
     async deleteAssignment(assignmentId) {
-        if (!confirm('Delete this assignment?')) return;
+        if (!confirm(t('delete_assignment'))) return;
 
         try {
             await API.deleteAssignment(assignmentId);
             await this.renderCalendar();
         } catch (err) {
-            alert('Failed to delete: ' + err.message);
+            alert(t('error') + ': ' + err.message);
         }
     },
 

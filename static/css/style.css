@@ -40,7 +40,9 @@
 
 [data-theme="dark"] input,
 [data-theme="dark"] select,
-[data-theme="dark"] textarea {
+[data-theme="dark"] textarea,
+[data-theme="dark"] .setting-row input,
+[data-theme="dark"] .setting-row select {
     background: var(--surface);
     color: var(--text);
     border-color: var(--border);
@@ -48,6 +50,52 @@
 
 [data-theme="dark"] .loading {
     color: var(--text);
+}
+
+[data-theme="dark"] .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .formality-btn {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .formality-btn.active {
+    background: rgba(91, 163, 245, 0.15);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+[data-theme="dark"] .target-chip {
+    background: rgba(91, 163, 245, 0.15);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+[data-theme="dark"] .mode-btn {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .mode-btn.active {
+    background: rgba(91, 163, 245, 0.15);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+[data-theme="dark"] .tag {
+    background: rgba(91, 163, 245, 0.15);
+    color: var(--primary);
+    border: 1px solid rgba(91, 163, 245, 0.3);
+}
+
+[data-theme="dark"] .prompt-card {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }

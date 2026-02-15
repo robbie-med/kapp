@@ -50,6 +50,11 @@ const Translations = {
             overdue: 'Overdue',
             completed: 'Complete',
             no_assignments_week: 'No assignments this week',
+            assignment: 'assignment',
+            assignments: 'assignments',
+            due: 'Due',
+            select_item: 'Select Item',
+            add_assignment_for: 'Add Assignment for',
 
             // Teacher Interface
             teacher_dashboard: 'Teacher Dashboard',
@@ -130,6 +135,11 @@ const Translations = {
             overdue: '지연',
             completed: '완료',
             no_assignments_week: '이번 주 과제가 없습니다',
+            assignment: '과제',
+            assignments: '과제',
+            due: '마감',
+            select_item: '항목 선택',
+            add_assignment_for: '과제 추가',
 
             // Teacher Interface
             teacher_dashboard: '선생님 대시보드',
