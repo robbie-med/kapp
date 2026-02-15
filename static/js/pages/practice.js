@@ -243,7 +243,10 @@ const PracticePage = {
             this.sessionStartTime = new Date().toISOString();
             this.session = await API.startPractice({ lesson_id: lessonId, formality: 'polite', item_count: 5, mode: 'speaking' });
 
-            // Display lesson info if available
+            // Render prompt first (sets up event listeners)
+            this.renderPrompt();
+
+            // Display lesson info if available - insert at top without destroying event listeners
             if (this.session.lesson_info) {
                 const lessonBanner = `
                     <div style="background:#f0f9ff;padding:0.75rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid var(--primary)">
@@ -251,12 +254,8 @@ const PracticePage = {
                         <div style="font-size:0.85rem;color:var(--text-secondary)">Practicing ${this.session.target_items.length} items from this lesson</div>
                     </div>
                 `;
-                this.renderPrompt();
-                // Insert lesson banner at the top
                 const practiceContent = document.getElementById('practice-content');
-                practiceContent.innerHTML = lessonBanner + practiceContent.innerHTML;
-            } else {
-                this.renderPrompt();
+                practiceContent.insertAdjacentHTML('afterbegin', lessonBanner);
             }
         } catch (err) {
             console.error('Lesson practice error:', err);
