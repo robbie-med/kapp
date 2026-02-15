@@ -231,7 +231,7 @@ const PracticePage = {
     async startLessonPractice(lessonId) {
         try {
             // Navigate to practice page and start a lesson-based session
-            Nav.show('practice');
+            Nav.navigate('practice');
 
             const el = document.getElementById('page-practice');
             el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading lesson...</div>';
