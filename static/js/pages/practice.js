@@ -47,13 +47,24 @@ const PracticePage = {
 
         try {
             this.sessionStartTime = new Date().toISOString();
+
+            // Build API request with lesson_id if practicing a specific lesson
+            const requestData = {
+                formality,
+                item_count: this.currentMode === 'reading' ? 5 : 3,
+                mode: this.currentMode || 'speaking'
+            };
+            if (this.currentLessonId) {
+                requestData.lesson_id = this.currentLessonId;
+            }
+
+            this.session = await API.startPractice(requestData);
+
             if (this.currentMode === 'reading') {
-                this.session = await API.startPractice({ formality, item_count: 5, mode: 'reading' });
                 this.currentCardIndex = 0;
                 this.renderReadingCard();
             } else {
                 // Speaking mode
-                this.session = await API.startPractice({ formality, item_count: 3, mode: 'speaking' });
                 this.renderPrompt();
             }
         } catch (err) {
@@ -229,42 +240,51 @@ const PracticePage = {
     },
 
     async startLessonPractice(lessonId) {
-        try {
-            // Navigate to practice page and start a lesson-based session
-            Nav.navigate('practice');
+        // Navigate to practice page and show mode/formality selectors
+        Nav.navigate('practice');
 
-            const el = document.getElementById('page-practice');
-            // Set up proper page structure with practice-content div
-            el.innerHTML = `
-                <div id="practice-content" style="margin-top:1rem">
-                    <div class="loading"><div class="spinner"></div>Loading lesson...</div>
-                </div>`;
+        // Store lesson ID for when they click Start
+        this.currentLessonId = lessonId;
 
-            this.sessionStartTime = new Date().toISOString();
-            this.session = await API.startPractice({ lesson_id: lessonId, formality: 'polite', item_count: 5, mode: 'speaking' });
+        // Get lesson info for display
+        const lesson = await API.getLesson(lessonId);
 
-            // Render prompt first (sets up event listeners)
-            this.renderPrompt();
+        const el = document.getElementById('page-practice');
+        el.innerHTML = `
+            <div style="background:#f0f9ff;padding:0.75rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid var(--primary)">
+                <div style="font-weight:600;margin-bottom:0.25rem">📚 Lesson ${lesson.lesson.lesson_number}: ${this._esc(lesson.lesson.title)}</div>
+                <div style="font-size:0.85rem;color:var(--text-secondary)">${lesson.lesson.items.length} items from this lesson</div>
+            </div>
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="speaking">Speaking</button>
+                <button class="mode-btn" data-mode="reading">Reading</button>
+            </div>
+            <div class="formality-selector">
+                <button class="formality-btn active" data-f="polite">해요체<br><small>Polite</small></button>
+                <button class="formality-btn" data-f="formal">합쇼체<br><small>Formal</small></button>
+                <button class="formality-btn" data-f="casual">해체<br><small>Casual</small></button>
+            </div>
+            <div style="text-align:center">
+                <button class="btn btn-primary btn-block" id="start-practice-btn">Start Practice</button>
+            </div>
+            <div id="practice-content"></div>`;
 
-            // Display lesson info if available - insert at top without destroying event listeners
-            if (this.session.lesson_info) {
-                const lessonBanner = `
-                    <div style="background:#f0f9ff;padding:0.75rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid var(--primary)">
-                        <div style="font-weight:600;margin-bottom:0.25rem">📚 ${this._esc(this.session.lesson_info)}</div>
-                        <div style="font-size:0.85rem;color:var(--text-secondary)">Practicing ${this.session.target_items.length} items from this lesson</div>
-                    </div>
-                `;
-                const practiceContent = document.getElementById('practice-content');
-                practiceContent.insertAdjacentHTML('afterbegin', lessonBanner);
-            }
-        } catch (err) {
-            console.error('Lesson practice error:', err);
-            const el = document.getElementById('page-practice');
-            el.innerHTML = `<div class="card">
-                <p class="error">Failed to start lesson practice: ${err.message}</p>
-                <button class="btn btn-secondary" onclick="LessonsPage.load()">Back to Lessons</button>
-            </div>`;
-        }
+        el.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                el.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.currentMode = btn.dataset.mode;
+            });
+        });
+
+        el.querySelectorAll('.formality-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                el.querySelectorAll('.formality-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        document.getElementById('start-practice-btn').addEventListener('click', () => this.startSession());
     },
 
     _esc(str) {
