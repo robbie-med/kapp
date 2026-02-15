@@ -14,7 +14,7 @@
     --header-height: 56px;
 }
 
-/* Dark Mode */
+/* ===== DARK MODE - COMPREHENSIVE STYLING ===== */
 [data-theme="dark"] {
     --primary: #5BA3F5;
     --primary-dark: #4A90D9;
@@ -26,8 +26,11 @@
     --text: #E0E0E0;
     --text-secondary: #A0A0A0;
     --border: #333333;
+    --surface-elevated: #2A2A2A;
+    --surface-hover: #252525;
 }
 
+/* Base elements */
 [data-theme="dark"] body {
     background: var(--bg);
     color: var(--text);
@@ -35,67 +38,235 @@
 
 [data-theme="dark"] .card {
     background: var(--surface);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
 
+/* Form inputs */
 [data-theme="dark"] input,
 [data-theme="dark"] select,
 [data-theme="dark"] textarea,
+[data-theme="dark"] .login-container input,
+[data-theme="dark"] .search-bar input,
+[data-theme="dark"] .search-bar select,
+[data-theme="dark"] .add-form input,
+[data-theme="dark"] .add-form select,
 [data-theme="dark"] .setting-row input,
-[data-theme="dark"] .setting-row select {
+[data-theme="dark"] .setting-row select,
+[data-theme="dark"] .api-key-input-row input {
     background: var(--surface);
     color: var(--text);
     border-color: var(--border);
 }
 
-[data-theme="dark"] .loading {
-    color: var(--text);
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus {
+    border-color: var(--primary);
+    background: var(--surface-elevated);
 }
 
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+/* Buttons */
 [data-theme="dark"] .btn-secondary {
-    background: var(--surface);
+    background: var(--surface-elevated);
     color: var(--text);
     border: 1px solid var(--border);
 }
 
+[data-theme="dark"] .btn-secondary:hover {
+    background: var(--surface-hover);
+}
+
+/* Mode selectors & formality buttons */
+[data-theme="dark"] .mode-btn,
 [data-theme="dark"] .formality-btn {
     background: var(--surface);
     color: var(--text);
     border-color: var(--border);
 }
 
+[data-theme="dark"] .mode-btn.active,
 [data-theme="dark"] .formality-btn.active {
     background: rgba(91, 163, 245, 0.15);
     border-color: var(--primary);
     color: var(--primary);
 }
 
-[data-theme="dark"] .target-chip {
-    background: rgba(91, 163, 245, 0.15);
-    color: var(--primary);
-    border: 1px solid var(--primary);
-}
-
-[data-theme="dark"] .mode-btn {
-    background: var(--surface);
-    color: var(--text);
-    border-color: var(--border);
-}
-
-[data-theme="dark"] .mode-btn.active {
-    background: rgba(91, 163, 245, 0.15);
-    border-color: var(--primary);
-    color: var(--primary);
-}
-
+/* Chips & Tags */
+[data-theme="dark"] .target-chip,
 [data-theme="dark"] .tag {
     background: rgba(91, 163, 245, 0.15);
     color: var(--primary);
     border: 1px solid rgba(91, 163, 245, 0.3);
 }
 
+/* Badges */
+[data-theme="dark"] .badge {
+    background: var(--surface-elevated);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .badge-level {
+    background: rgba(91, 163, 245, 0.15);
+    color: var(--primary);
+}
+
+[data-theme="dark"] .badge-type {
+    background: rgba(156, 39, 176, 0.15);
+    color: #CE93D8;
+}
+
+/* Score badges */
+[data-theme="dark"] .score-high {
+    background: rgba(102, 187, 106, 0.15);
+    color: var(--success);
+}
+
+[data-theme="dark"] .score-mid {
+    background: rgba(255, 167, 38, 0.15);
+    color: var(--warning);
+}
+
+[data-theme="dark"] .score-low {
+    background: rgba(239, 83, 80, 0.15);
+    color: var(--error);
+}
+
+/* Feedback boxes */
+[data-theme="dark"] .correction-box {
+    background: rgba(102, 187, 106, 0.1);
+    border: 1px solid rgba(102, 187, 106, 0.3);
+}
+
+[data-theme="dark"] .transcript-box {
+    background: rgba(255, 167, 38, 0.1);
+    border: 1px solid rgba(255, 167, 38, 0.3);
+}
+
+[data-theme="dark"] .correction-box h4,
+[data-theme="dark"] .transcript-box h4 {
+    color: var(--text);
+}
+
+/* Status messages */
+[data-theme="dark"] .key-active,
+[data-theme="dark"] .msg-success {
+    background: rgba(102, 187, 106, 0.15);
+    color: var(--success);
+}
+
+[data-theme="dark"] .key-missing,
+[data-theme="dark"] .msg-error {
+    background: rgba(239, 83, 80, 0.15);
+    color: var(--error);
+}
+
+[data-theme="dark"] .msg-info {
+    background: rgba(91, 163, 245, 0.15);
+    color: var(--primary);
+}
+
+[data-theme="dark"] .api-key-status {
+    background: var(--surface-elevated);
+}
+
+/* Record button */
+[data-theme="dark"] .record-btn {
+    background: var(--surface-elevated);
+    border-color: var(--primary);
+}
+
+[data-theme="dark"] .record-btn.recording {
+    background: var(--error);
+    border-color: var(--error);
+}
+
+/* Prompt card */
 [data-theme="dark"] .prompt-card {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+}
+
+/* Progress bars */
+[data-theme="dark"] .bar-unseen,
+[data-theme="dark"] .goal-progress-bar {
+    background: var(--surface-elevated);
+}
+
+/* Interval toggle */
+[data-theme="dark"] .interval-toggle {
+    background: var(--surface-elevated);
+}
+
+[data-theme="dark"] .interval-btn.active {
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* Loading state */
+[data-theme="dark"] .loading {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .spinner {
+    border-color: var(--border);
+    border-top-color: var(--primary);
+}
+
+/* Mastery ring */
+[data-theme="dark"] .mastery-ring {
+    background: var(--surface-elevated);
+}
+
+/* Empty state */
+[data-theme="dark"] .empty-state {
+    color: var(--text-secondary);
+}
+
+/* Modals */
+[data-theme="dark"] #assignment-modal {
+    background: rgba(0, 0, 0, 0.75) !important;
+}
+
+/* Ensure text remains readable */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: var(--text);
+}
+
+[data-theme="dark"] p {
+    color: var(--text);
+}
+
+/* Select dropdown styling */
+[data-theme="dark"] select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* Hover states */
+[data-theme="dark"] .nav-btn:hover {
+    background: var(--surface-hover);
+}
+
+[data-theme="dark"] .mode-btn:hover:not(.active),
+[data-theme="dark"] .formality-btn:hover:not(.active) {
+    background: var(--surface-hover);
+    border-color: var(--text-secondary);
+}
+
+/* Focus states */
+[data-theme="dark"] button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -245,10 +416,11 @@ body {
 }
 .target-chip {
     background: #E3F2FD;
-    color: var(--primary-dark);
+    color: #1976D2;
     padding: 0.35rem 0.75rem;
     border-radius: 20px;
     font-size: 0.85rem;
+    border: 1px solid transparent;
 }
 
 /* Record button */
