@@ -17,6 +17,7 @@ const App = {
 
     async init() {
         Nav.init();
+        this.initThemeToggle();
         this.initLanguageToggle();
 
         try {
@@ -120,6 +121,31 @@ const App = {
         }
 
         PracticePage.load();
+    },
+
+    initThemeToggle() {
+        const toggle = document.getElementById('theme-toggle');
+        if (!toggle) return;
+
+        // Get saved theme or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        this.setTheme(savedTheme);
+
+        // Update button icon
+        toggle.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+        // Toggle on click
+        toggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            this.setTheme(newTheme);
+            toggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        });
+    },
+
+    setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
     },
 
     initLanguageToggle() {

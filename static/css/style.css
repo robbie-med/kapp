@@ -14,6 +14,42 @@
     --header-height: 56px;
 }
 
+/* Dark Mode */
+[data-theme="dark"] {
+    --primary: #5BA3F5;
+    --primary-dark: #4A90D9;
+    --success: #66BB6A;
+    --warning: #FFA726;
+    --error: #EF5350;
+    --bg: #121212;
+    --surface: #1E1E1E;
+    --text: #E0E0E0;
+    --text-secondary: #A0A0A0;
+    --border: #333333;
+}
+
+[data-theme="dark"] body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+[data-theme="dark"] .card {
+    background: var(--surface);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .loading {
+    color: var(--text);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
