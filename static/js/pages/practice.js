@@ -234,14 +234,17 @@ const PracticePage = {
             Nav.navigate('practice');
 
             const el = document.getElementById('page-practice');
-            el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading lesson...</div>';
+            // Set up proper page structure with practice-content div
+            el.innerHTML = `
+                <div id="practice-content" style="margin-top:1rem">
+                    <div class="loading"><div class="spinner"></div>Loading lesson...</div>
+                </div>`;
 
             this.sessionStartTime = new Date().toISOString();
             this.session = await API.startPractice({ lesson_id: lessonId, formality: 'polite', item_count: 5, mode: 'speaking' });
 
             // Display lesson info if available
             if (this.session.lesson_info) {
-                const content = document.getElementById('practice-content') || document.createElement('div');
                 const lessonBanner = `
                     <div style="background:#f0f9ff;padding:0.75rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid var(--primary)">
                         <div style="font-weight:600;margin-bottom:0.25rem">📚 ${this._esc(this.session.lesson_info)}</div>
