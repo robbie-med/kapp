@@ -166,15 +166,36 @@ const PracticePage = {
             </div>
             <div style="text-align:center;margin-top:1rem">
                 <button class="btn btn-primary btn-block" id="reveal-btn">Show Answer</button>
-                <button class="btn btn-primary btn-block hidden" id="next-card-btn">Next</button>
+                <div id="confidence-buttons" class="hidden" style="display:flex;gap:0.5rem;margin-top:1rem">
+                    <button class="btn btn-block" style="background:#ef4444;color:white" id="conf-1">1 - Hard</button>
+                    <button class="btn btn-block" style="background:#f59e0b;color:white" id="conf-2">2 - Good</button>
+                    <button class="btn btn-block" style="background:#10b981;color:white" id="conf-3">3 - Easy</button>
+                </div>
             </div>`;
 
         document.getElementById('reveal-btn').addEventListener('click', () => {
             document.getElementById('reveal-area').classList.remove('hidden');
             document.getElementById('reveal-btn').classList.add('hidden');
-            document.getElementById('next-card-btn').classList.remove('hidden');
+            document.getElementById('confidence-buttons').classList.remove('hidden');
         });
-        document.getElementById('next-card-btn').addEventListener('click', () => {
+
+        // Store confidence ratings for SRS
+        if (!this.session.cardRatings) {
+            this.session.cardRatings = [];
+        }
+
+        document.getElementById('conf-1').addEventListener('click', () => {
+            this.session.cardRatings.push({item_id: card.item_id, confidence: 1});
+            this.currentCardIndex++;
+            this.renderReadingCard();
+        });
+        document.getElementById('conf-2').addEventListener('click', () => {
+            this.session.cardRatings.push({item_id: card.item_id, confidence: 2});
+            this.currentCardIndex++;
+            this.renderReadingCard();
+        });
+        document.getElementById('conf-3').addEventListener('click', () => {
+            this.session.cardRatings.push({item_id: card.item_id, confidence: 3});
             this.currentCardIndex++;
             this.renderReadingCard();
         });
@@ -188,6 +209,7 @@ const PracticePage = {
                 item_ids: this.session.cards.map(c => c.item_id),
                 duration_seconds: duration,
                 cards_reviewed: this.session.cards.length,
+                card_ratings: this.session.cardRatings || [],
             });
             content.innerHTML = `
                 <div class="card" style="text-align:center;padding:2rem">
@@ -207,13 +229,13 @@ const PracticePage = {
     },
 
     async startLessonPractice(lessonId) {
-        // Navigate to practice page and start a lesson-based session
-        Nav.show('practice');
-
-        const el = document.getElementById('page-practice');
-        el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading lesson...</div>';
-
         try {
+            // Navigate to practice page and start a lesson-based session
+            Nav.show('practice');
+
+            const el = document.getElementById('page-practice');
+            el.innerHTML = '<div class="loading"><div class="spinner"></div>Loading lesson...</div>';
+
             this.sessionStartTime = new Date().toISOString();
             this.session = await API.startPractice({ lesson_id: lessonId, formality: 'polite', item_count: 5, mode: 'speaking' });
 
@@ -234,7 +256,12 @@ const PracticePage = {
                 this.renderPrompt();
             }
         } catch (err) {
-            el.innerHTML = `<div class="card"><p class="error">${err.message}</p></div>`;
+            console.error('Lesson practice error:', err);
+            const el = document.getElementById('page-practice');
+            el.innerHTML = `<div class="card">
+                <p class="error">Failed to start lesson practice: ${err.message}</p>
+                <button class="btn btn-secondary" onclick="LessonsPage.load()">Back to Lessons</button>
+            </div>`;
         }
     },
 

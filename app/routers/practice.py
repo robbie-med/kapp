@@ -288,31 +288,43 @@ async def submit_practice(
 
 @router.post("/reading/complete")
 async def complete_reading(request: Request):
-    """Log completion of a reading/flashcard session."""
+    """Log completion of a reading/flashcard session with confidence ratings."""
     student_id = get_student_id(request) or 1
     body = await request.json()
     item_ids = body.get("item_ids", [])
     duration_seconds = body.get("duration_seconds")
     cards_reviewed = body.get("cards_reviewed", 0)
+    card_ratings = body.get("card_ratings", [])  # [{item_id: int, confidence: 1-3}, ...]
+
+    # Create rating lookup
+    ratings_by_item = {r["item_id"]: r["confidence"] for r in card_ratings}
 
     db = await get_db()
     try:
         from app.services.srs import update_srs_after_practice
-        # Record encounters as practiced
+        # Record encounters as practiced with confidence-based scoring
         for item_id in item_ids:
-            await record_encounter(db, student_id, item_id, practiced=True)
-            # Light SRS update: treat as low-quality practice (0.6 score)
-            await update_srs_after_practice(db, item_id, 0.6, student_id=student_id)
+            confidence = ratings_by_item.get(item_id, 2)  # Default to 2 (Good) if not rated
+            # Convert confidence (1-3) to score (0.4-1.0)
+            # 1 (Hard) = 0.4, 2 (Good) = 0.7, 3 (Easy) = 1.0
+            score = {1: 0.4, 2: 0.7, 3: 1.0}.get(confidence, 0.7)
 
-        # Log in practice_log
+            await record_encounter(db, student_id, item_id, practiced=True)
+            await update_srs_after_practice(db, item_id, score, student_id=student_id)
+
+        # Log in practice_log with confidence ratings
+        avg_confidence = sum(ratings_by_item.values()) / len(ratings_by_item) if ratings_by_item else 2
+        avg_score = {1: 0.4, 2: 0.7, 3: 1.0}.get(round(avg_confidence), 0.7)
+
         await db.execute(
             """INSERT INTO practice_log
                (item_ids, prompt, formality, transcript, overall_score,
-                student_id, duration_seconds, practice_mode)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                student_id, duration_seconds, practice_mode, feedback_json)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (json.dumps(item_ids), "Reading practice", "n/a",
-             f"{cards_reviewed} cards reviewed", 0.6,
-             student_id, duration_seconds, "reading")
+             f"{cards_reviewed} cards reviewed",avg_score,
+             student_id, duration_seconds, "reading",
+             json.dumps({"card_ratings": card_ratings}))
         )
         await db.commit()
         return {"ok": True}
