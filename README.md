@@ -36,6 +36,34 @@ This app combines structured curriculum from [HowToStudyKorean.com](https://www.
 
 ---
 
+## Screenshots
+
+### Login Screen
+![Login Screen](screenshots/login.png)
+*Student and teacher login with language toggle*
+
+### Practice Mode
+![Practice Mode](screenshots/practice.png)
+*AI-generated situational prompts with target vocabulary/grammar*
+
+### AI Feedback
+![AI Feedback](screenshots/feedback.png)
+*Detailed grammar, vocabulary, and formality analysis*
+
+### Lessons Browser
+![Lessons Browser](screenshots/lessons.png)
+*Structured curriculum from HowToStudyKorean.com*
+
+### Analytics Dashboard
+![Analytics Dashboard](screenshots/analytics.png)
+*Weakness heatmap, progress tracking, and error patterns*
+
+### Teacher Interface
+![Teacher Interface](screenshots/teacher.png)
+*Content management and student progress monitoring*
+
+---
+
 ## Key Features
 
 ### For Students
