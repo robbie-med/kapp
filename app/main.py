@@ -137,7 +137,7 @@ async def delete_student(student_id: int):
 
 # --- Import routers (all require auth) ---
 
-from app.routers import practice, items, review, stats, settings, webhook, sentences, goals, curriculum
+from app.routers import practice, items, review, stats, settings, webhook, sentences, goals, curriculum, calendar
 
 app.include_router(practice.router, prefix="/api/practice", dependencies=[Depends(require_auth)])
 app.include_router(items.router, prefix="/api/items", dependencies=[Depends(require_auth)])
@@ -147,6 +147,7 @@ app.include_router(settings.router, prefix="/api/settings", dependencies=[Depend
 app.include_router(sentences.router, prefix="/api/sentences", dependencies=[Depends(require_auth)])
 app.include_router(goals.router, prefix="/api/goals", dependencies=[Depends(require_auth)])
 app.include_router(curriculum.router, prefix="/api/curriculum", dependencies=[Depends(require_auth)])
+app.include_router(calendar.router, prefix="/api/calendar", dependencies=[Depends(require_auth)])
 app.include_router(webhook.router, prefix="/api/webhook")  # webhooks auth differently
 
 

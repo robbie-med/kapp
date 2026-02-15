@@ -95,4 +95,18 @@ const API = {
     getUnits() { return this.get('/api/curriculum/units'); },
     getLessons(unitId) { return this.get(`/api/curriculum/units/${unitId}/lessons`); },
     getLesson(lessonId) { return this.get(`/api/curriculum/lessons/${lessonId}`); },
+
+    // Calendar/Assignments
+    getAssignments(studentId = null, startDate = null, endDate = null) {
+        const params = new URLSearchParams();
+        if (studentId) params.append('student_id', studentId);
+        if (startDate) params.append('start_date', startDate);
+        if (endDate) params.append('end_date', endDate);
+        return this.get(`/api/calendar/assignments?${params}`);
+    },
+    createAssignment(data) { return this.post('/api/calendar/assignments', data); },
+    updateAssignment(id, data) { return this.put(`/api/calendar/assignments/${id}`, data); },
+    deleteAssignment(id) { return this.del(`/api/calendar/assignments/${id}`); },
+    getStudentUpcoming(studentId) { return this.get(`/api/calendar/student/${studentId}/upcoming`); },
+    completeAssignment(id) { return this.post(`/api/calendar/assignments/${id}/complete`); },
 };

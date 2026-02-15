@@ -31,6 +31,9 @@
         <div id="main-app" class="hidden">
             <header id="app-header">
                 <h2 id="page-title">Practice</h2>
+                <button id="lang-toggle" style="background:none;border:1px solid var(--border);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.85rem">
+                    EN
+                </button>
             </header>
 
             <main id="page-content">
@@ -41,6 +44,7 @@
                 <div id="page-stats" class="page"></div>
                 <div id="page-settings" class="page"></div>
                 <div id="page-teacher" class="page"></div>
+                <div id="page-calendar" class="page"></div>
             </main>
 
             <nav id="bottom-nav">
@@ -72,10 +76,15 @@
                     <span class="nav-icon">📝</span>
                     <span class="nav-label">관리</span>
                 </button>
+                <button class="nav-btn hidden" data-page="calendar" id="nav-calendar">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-label">일정</span>
+                </button>
             </nav>
         </div>
     </div>
 
+    <script src="/static/js/translations.js"></script>
     <script src="/static/js/api.js"></script>
     <script src="/static/js/audio.js"></script>
     <script src="/static/js/components/feedback.js"></script>
@@ -88,6 +97,7 @@
     <script src="/static/js/pages/stats.js"></script>
     <script src="/static/js/pages/settings.js"></script>
     <script src="/static/js/pages/teacher.js"></script>
+    <script src="/static/js/pages/calendar.js"></script>
     <script src="/static/js/app.js"></script>
 </body>
 </html>

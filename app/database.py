@@ -268,6 +268,28 @@ MIGRATIONS = [
     CREATE INDEX IF NOT EXISTS idx_lesson_items_item ON lesson_items(item_id);
     CREATE INDEX IF NOT EXISTS idx_lesson_progress_student ON lesson_progress(student_id, lesson_id);
     """,
+    # Migration 6: Calendar/curriculum assignments for teacher-student planning
+    """
+    -- Teacher can assign lessons/sentences/vocab to students with due dates
+    CREATE TABLE IF NOT EXISTS curriculum_assignments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+        teacher_id INTEGER DEFAULT 1,
+        assignment_type TEXT NOT NULL CHECK(assignment_type IN ('lesson', 'sentence', 'vocab')),
+        lesson_id INTEGER REFERENCES curriculum_lessons(id) ON DELETE CASCADE,
+        sentence_id INTEGER REFERENCES sentences(id) ON DELETE SET NULL,
+        item_id INTEGER REFERENCES items(id) ON DELETE CASCADE,
+        assigned_date DATE NOT NULL DEFAULT (date('now')),
+        due_date DATE NOT NULL,
+        completed_at DATETIME,
+        notes TEXT DEFAULT '',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_assignments_student ON curriculum_assignments(student_id, due_date);
+    CREATE INDEX IF NOT EXISTS idx_assignments_completed ON curriculum_assignments(completed_at);
+    CREATE INDEX IF NOT EXISTS idx_assignments_type ON curriculum_assignments(assignment_type);
+    """,
 ]
 
 # Post-migration Python logic (runs after SQL for each migration index)

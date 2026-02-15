@@ -6,6 +6,7 @@ const Pages = {
     stats: StatsPage,
     settings: SettingsPage,
     teacher: TeacherPage,
+    calendar: CalendarPage,
 };
 
 const App = {
@@ -16,6 +17,7 @@ const App = {
 
     async init() {
         Nav.init();
+        this.initLanguageToggle();
 
         try {
             const auth = await API.checkAuth();
@@ -106,15 +108,38 @@ const App = {
 
         // Show/hide teacher nav
         const teacherNav = document.getElementById('nav-teacher');
+        const calendarNav = document.getElementById('nav-calendar');
         if (teacherNav) {
             if (this.role === 'teacher') {
                 teacherNav.classList.remove('hidden');
+                if (calendarNav) calendarNav.classList.remove('hidden');
             } else {
                 teacherNav.classList.add('hidden');
+                if (calendarNav) calendarNav.classList.add('hidden');
             }
         }
 
         PracticePage.load();
+    },
+
+    initLanguageToggle() {
+        const toggle = document.getElementById('lang-toggle');
+        if (!toggle) return;
+
+        // Set initial text
+        toggle.textContent = Translations.getLanguage() === 'ko' ? '한' : 'EN';
+
+        // Toggle on click
+        toggle.addEventListener('click', () => {
+            const newLang = Translations.getLanguage() === 'en' ? 'ko' : 'en';
+            Translations.setLanguage(newLang);
+            toggle.textContent = newLang === 'ko' ? '한' : 'EN';
+
+            // Reload current page to apply translations
+            if (Nav.currentPage && Pages[Nav.currentPage] && Pages[Nav.currentPage].load) {
+                Pages[Nav.currentPage].load();
+            }
+        });
     },
 };
 
